@@ -1,7 +1,10 @@
 # 侠客日记 · MCP Server 改造说明
 
-本仓库基于 [Yu-Core/SwashbucklerDiary](https://github.com/Yu-Core/SwashbucklerDiary)
-（AGPL-3.0）增加了 **MCP（Model Context Protocol）服务端接口**，让 AI 客户端可以读写日记。
+本仓库：https://github.com/zengxu7766-hub/SwashbucklerDiary-MCP
+
+基于 [Yu-Core/SwashbucklerDiary](https://github.com/Yu-Core/SwashbucklerDiary)
+（上游 commit `f45df93`，AGPL-3.0）增加了 **MCP（Model Context Protocol）服务端接口**，
+让 AI 客户端可以读写日记。
 
 > 本项目仍采用 **AGPL-3.0** 协议，`LICENSE.txt` 必须保留；若对外分发或公开仓库，
 > 请同样以 AGPL-3.0 开源，并在 README 注明本改动来源。
@@ -39,16 +42,17 @@
 
 - 装了纯 .NET 10 SDK（arm64），`dotnet build src/SwashbucklerDiary.Rcl.Hybird/SwashbucklerDiary.Rcl.Hybird.csproj`：
   **Build succeeded, 0 Error(s)**（仅既有第三方包警告）。
-- 写了端到端测试（真实 EmbedIO 服务器 + 内存桩），**27 / 27 全部通过**：初始化、会话校验、7 个工具、隐私隔离、鉴权、错误处理、中文 UTF-8 输出等。
+- 写了端到端测试（真实 EmbedIO 服务器 + 内存桩），**30 / 30 全部通过**：初始化、会话校验、7 个工具、隐私隔离、鉴权、错误处理、中文 UTF-8 输出、LAN 绑定等。
 
 > 本机是 arm64 Android 手机（proot）。Android SDK 的 `aapt2` 只有 x86-64 原生二进制，
 > 在此环境需要 qemu 包装且无法注册 binfmt，故 **不在本机出 APK**。
 
 ### 用 GitHub Actions 出 APK（推荐）
 
-1. 把本仓库推到你自己的 GitHub 账号（公开仓库免费）。
-2. 打开仓库 → **Actions** → 左侧 **Build Android APK (MCP fork)** → **Run workflow**。
-3. 选 `arm64`（真机）或 `x64`（模拟器），是否附带到 Release；跑完在 **Artifacts** 下载 `*-Signed.apk`。
+本仓库已托管在 [zengxu7766-hub/SwashbucklerDiary-MCP](https://github.com/zengxu7766-hub/SwashbucklerDiary-MCP)（公开，AGPL-3.0）。
+
+1. 打开仓库 → **Actions** → 左侧 **Build Android APK (MCP fork)** → **Run workflow**。
+2. 选 `arm64`（真机）或 `x64`（模拟器），是否附带到 Release；跑完在 **Artifacts** 下载 `*-Signed.apk`。
 
 工作流要点：
 
