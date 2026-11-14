@@ -1,0 +1,108 @@
+name: Build Android APK (MCP fork)
+
+# Derived from the upstream .github/workflows/releases.yml, but:
+#   - no secrets needed: a throwaway debug keystore is generated in-run
+#   - Windows runner (x86-64) is used, so the Android SDK's aapt2 (an x86-64
+#     ELF binary) runs natively. Building on an arm64 Linux box requires qemu
+#     wrappers for aapt2/ld and is unreliable under proot.
+on:
+  workflow_dispatch:
+    inputs:
+      arch:
+        description: 'Target CPU (arm64 = most real phones, x64 = emulator)'
+        required: true
+        default: 'arm64'
+        type: choice
+        options:
+          - arm64
+          - x64
+      upload_release:
+        description: 'Also attach the APK to a GitHub Release'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  CSPROJ: 'src/SwashbucklerDiary.Maui/SwashbucklerDiary.Maui.csproj'
+  ARTIFACTS: 'artifacts'
+
+jobs:
+  build-android:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'microsoft'
+          java-version: '17'
+
+      - name: Install MAUI workload
+        run: dotnet workload install maui --ignore-failed-sources
+
+      - name: Generate a throwaway debug keystore
+        shell: pwsh
+        run: |
+          $ks = Join-Path $env:GITHUB_WORKSPACE 'debug.keystore'
+          & "$env:JAVA_HOME\bin\keytool" -genkeypair -v `
+            -keystore $ks `
+            -storepass android `
+            -alias androiddebugkey `
+            -keypass android `
+            -keyalg RSA -keysize 2048 -validity 10000 `
+            -dname "CN=Android Debug,O=Android,C=US"
+          "KEYSTORE_PATH=$ks" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Publish signed APK
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path $env:ARTIFACTS | Out-Null
+          $rid = if ('${{ inputs.arch }}' -eq 'x64') { 'android-x64' } else { 'android-arm64' }
+          dotnet publish $env:CSPROJ `
+            -c Release `
+            -f net10.0-android `
+            -r $rid `
+            --self-contained true `
+            -p:PublishTrimmed=true `
+            -p:AndroidPackageFormat=apk `
+            -p:AndroidKeyStore=true `
+            "-p:AndroidSigningKeyStore=$env:KEYSTORE_PATH" `
+            -p:AndroidSigningKeyAlias=androiddebugkey `
+            -p:AndroidSigningKeyPass=android `
+            -p:AndroidSigningStorePass=android
+          if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed with $LASTEXITCODE" }
+          $apk = Get-ChildItem -Path 'src/SwashbucklerDiary.Maui/bin' -Recurse -Filter '*Signed.apk' | Select-Object -First 1
+          if (-not $apk) { throw 'Signed APK not found after publish' }
+          $dest = Join-Path $env:ARTIFACTS ("SwashbucklerDiary-MCP-" + $rid + ".apk")
+          Copy-Item $apk.FullName $dest
+          Write-Host "APK: $dest"
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-${{ inputs.arch }}-apk
+          path: artifacts/*.apk
+          if-no-files-found: error
+
+      - name: Attach APK to a GitHub Release
+        if: ${{ inputs.upload_release }}
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: artifacts/*.apk
+          file_glob: true
+          tag: apk-${{ github.run_number }}
+          overwrite: true
