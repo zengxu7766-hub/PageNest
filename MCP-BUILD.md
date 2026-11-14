@@ -52,7 +52,11 @@
 本仓库已托管在 [zengxu7766-hub/SwashbucklerDiary-MCP](https://github.com/zengxu7766-hub/SwashbucklerDiary-MCP)（公开，AGPL-3.0）。
 
 1. 打开仓库 → **Actions** → 左侧 **Build Android APK (MCP fork)** → **Run workflow**。
-2. 选 `arm64`（真机）或 `x64`（模拟器），是否附带到 Release；跑完在 **Artifacts** 下载 `*-Signed.apk`。
+2. 选 `arm64`（真机）或 `x64`（模拟器），是否附带到 Release；跑完在 **Artifacts** 下载 `SwashbucklerDiary-MCP-<arch>.apk`。
+
+> **已实测（2026-11-15）**：首次 `arm64` 手动构建全流程成功（约 10 分钟），
+> 产出 `android-arm64-apk` artifact ≈ 86 MB，内含 `arm64-v8a` 原生库与 debug 签名
+> （`META-INF/ANDROIDD.RSA`）。本机也已把 APK 下载到手机存储供真机安装。
 
 工作流要点：
 
