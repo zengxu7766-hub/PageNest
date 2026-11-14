@@ -23,7 +23,7 @@
 		<MauiVersion>10.0.41</MauiVersion>
 
 		<!-- Display name -->
-		<ApplicationTitle>侠客日记</ApplicationTitle>
+		<ApplicationTitle>栖页</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.yucore.swashbucklerdiary</ApplicationId>
@@ -110,16 +110,16 @@
 	<ItemGroup>
 
 		<!-- App icon for android -->
-		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.png" ForegroundScale="0.65" Color="#FFFFFF" />
+		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="Resources\AppIcon\appicon.png" BaseSize="500,500" />
 
 		<!-- App icon for ios -->
-		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'" Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.png" Color="#FFFFFF" />
+		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'" Include="Resources\AppIcon\appicon.png" BaseSize="500,500" />
 
 		<!-- App icon for maccatalyst -->
-		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'" Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.png" Color="#FFFFFF" />
+		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'" Include="Resources\AppIcon\appicon.png" BaseSize="500,500" />
 
 		<!-- App icon for windows -->
-		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.png" Color="#FFFFFF" />
+		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="Resources\AppIcon\appicon.png" BaseSize="500,500" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.jpg" Color="#FFFFFF" BaseSize="128,128" />

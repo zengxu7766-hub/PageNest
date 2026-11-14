@@ -444,17 +444,5 @@
     "Icon": "mdi:mdi-file-document-edit-outline",
     "Path": "About / Log file",
     "Href": "log"
-  },
-  {
-    "Name": "Give a good review",
-    "Icon": "star",
-    "Path": "About / Give a good review",
-    "Href": "about"
-  },
-  {
-    "Name": "Sponsor us",
-    "Icon": "volunteer_activism",
-    "Path": "About / Sponsor us",
-    "Href": "sponsor"
   }
 ]

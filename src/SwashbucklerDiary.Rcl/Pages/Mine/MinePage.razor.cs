@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using SwashbucklerDiary.Rcl.Components;
 using SwashbucklerDiary.Rcl.Essentials;
 using SwashbucklerDiary.Rcl.Extensions;
@@ -26,8 +25,6 @@ namespace SwashbucklerDiary.Rcl.Pages
         private bool showLanguage;
 
         private bool showTheme;
-
-        private bool showFeedback;
 
         private bool showPreviewImage;
 
@@ -62,18 +59,8 @@ namespace SwashbucklerDiary.Rcl.Pages
 
         private Dictionary<string, List<DynamicListItem>> ViewLists = [];
 
-        private List<DynamicListItem> FeedbackTypes = [];
-
-        private Dictionary<string, string> FeedbackTypeDatas = [];
-
         [Inject]
         protected IDiaryService DiaryService { get; set; } = default!;
-
-        [Inject]
-        protected IAccessExternal AccessExternal { get; set; } = default!;
-
-        [Inject]
-        protected ILogger<MinePage> Logger { get; set; } = default!;
 
         [Inject]
         protected IThemeService ThemeService { get; set; } = default!;
@@ -92,13 +79,6 @@ namespace SwashbucklerDiary.Rcl.Pages
             base.OnInitialized();
 
             LoadView();
-        }
-
-        protected override async Task OnInitializedAsync()
-        {
-            await LoadViewAsync();
-
-            await base.OnInitializedAsync();
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -170,22 +150,10 @@ namespace SwashbucklerDiary.Rcl.Pages
                     new()
                     {
                         new(this,"Fix Tool","build",() => To("fixTool")),
-                        new(this,"Contact us","mail",() => showFeedback = true),
                         new(this,"About","info",() => To("about")),
                     }
                 }
             };
-            FeedbackTypes =
-            [
-                new(this, "Email","mail",SendMail),
-                new(this, "Github","mdi:mdi-github",ToGithub),
-                new(this, "QQ Group","mdi:mdi-qqchat",OpenQQGroup),
-            ];
-        }
-
-        private async Task LoadViewAsync()
-        {
-            FeedbackTypeDatas = await StaticWebAssets.ReadRclJsonAsync<Dictionary<string, string>>("json/feedback-type/feedback-type.json");
         }
 
         private async Task LanguageChanged(string value)
@@ -194,56 +162,10 @@ namespace SwashbucklerDiary.Rcl.Pages
             await SettingService.SetAsync(s => s.Language, value);
         }
 
-        private async Task SendMail()
-        {
-            var mail = FeedbackTypeDatas["Email"];
-            try
-            {
-                bool isSuccess = await PlatformIntegration.SendEmail(I18n.T("Swashbuckler diary feedback"), null, [mail]);
-                if (isSuccess)
-                {
-                    return;
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e, "SendMailFail");
-            }
-
-            await PlatformIntegration.SetClipboardAsync(mail);
-            await AlertService.SuccessAsync(I18n.T("The email address has been copied to the clipboard."));
-        }
-
-        private async Task ToGithub()
-        {
-            var githubUrl = FeedbackTypeDatas["Github"];
-            await PlatformIntegration.OpenBrowser(githubUrl);
-        }
-
         private async Task ThemeChanged(Theme value)
         {
             ThemeService.SetTheme(value);
             await SettingService.SetAsync(s => s.Theme, (int)value);
-        }
-
-        private async Task OpenQQGroup()
-        {
-            try
-            {
-                bool isSuccess = await AccessExternal.JoinQQGroup();
-                if (isSuccess)
-                {
-                    return;
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e, "JoinQQGroupError");
-            }
-
-            var qqGroup = FeedbackTypeDatas["QQ Group"];
-            await PlatformIntegration.SetClipboardAsync(qqGroup);
-            await AlertService.SuccessAsync(I18n.T("The QQ group number has been copied to the clipboard."));
         }
 
         private void Search(string? value)

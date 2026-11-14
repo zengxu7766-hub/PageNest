@@ -1,10 +1,10 @@
-# 侠客日记 · MCP Server 改造说明
+# 栖页 · MCP Server 改造说明
 
 本仓库：https://github.com/zengxu7766-hub/SwashbucklerDiary-MCP
 
 基于 [Yu-Core/SwashbucklerDiary](https://github.com/Yu-Core/SwashbucklerDiary)
 （上游 commit `f45df93`，AGPL-3.0）增加了 **MCP（Model Context Protocol）服务端接口**，
-让 AI 客户端可以读写日记。
+让 AI 客户端可以读写日记；并做了本地化定制：**应用改名「栖页」、更换图标、精简关于/我的页、检查更新指向本仓库**。
 
 > 本项目仍采用 **AGPL-3.0** 协议，`LICENSE.txt` 必须保留；若对外分发或公开仓库，
 > 请同样以 AGPL-3.0 开源，并在 README 注明本改动来源。
@@ -25,6 +25,20 @@
 | `Maui/MauiProgram.cs` | `builder.Build()` 后调用 `IMcpService.Apply()` 启动服务 |
 | `.github/workflows/build-android-apk.yml` | 免 secret 的一键出 APK 工作流 |
 | `MCP-BUILD.md` | 本文件 |
+
+### 1.1 本地化定制（2026-11-15）
+
+| 位置 | 内容 |
+| --- | --- |
+| `Maui/SwashbucklerDiary.Maui.csproj` | `<ApplicationTitle>栖页</ApplicationTitle>`；4 个 `<MauiIcon>` 改为单图 `appicon.png` + `BaseSize="500,500"`。**`ApplicationId` 保持 `com.yucore.swashbucklerdiary` 不变**，以便覆盖安装、不丢日记数据 |
+| `Maui/Resources/AppIcon/appicon.png`(+`.svg`)、`Resources/Splash/splash.jpg`、`Rcl/wwwroot/logo/logo.jpg` | 换成用户提供的「淡青圆角方块 + 打开的书 + 太阳」图标（500×500 RGBA，四角透明） |
+| `Maui/Platforms/Android/Resources/values*/Strings.xml`（13 个） | 桌面应用名 `app_name` 统一为「栖页」，`app_name_debug` 为「栖页 Debug」 |
+| `Rcl/wwwroot/i18n/*.json`（12 语言） | 键 `"Swashbuckler Diary"` 的值统一改为「栖页」（键名不变，避免改 7 处 `I18n.T(...)` 源码） |
+| `Rcl/Pages/Mine/About/AboutPage.razor(.cs)` | 去掉「APP备案号:辽ICP备2023009191号-2A」整块、去掉「捐助我们」与「给个好评」入口及相关字段/方法/注入 |
+| `Rcl/Pages/Mine/MinePage.razor(.cs)` | 去掉「联系我们」及其弹窗、反馈数据、邮件/Github/QQ 群方法、`IAccessExternal`/`ILogger` 注入 |
+| `Rcl/Services/VersionUpdataManager/VersionUpdataManager.cs` | 检查更新 API 改为 `https://api.github.com/repos/zengxu7766-hub/SwashbucklerDiary-MCP/releases/latest`（去掉 Gitee 分流），并用 `Version.TryParse` 兼容本仓库 `apk-N` 这类非版本 tag |
+| `Rcl.Hybird/Layout/UpdateDialog.razor(.cs)`、`Rcl.Web/Layout/UpdateDialog.cs` | 更新地址改到本仓库 Releases；删掉上游作者的「移动云盘」下载项及弹窗 |
+| `Rcl/wwwroot/json/{app-features,code-source,feedback-type}/*.json` | 搜索索引移除捐助/好评条目；「查看源码」指向本 fork（保留 Upstream 署名）；清理上游邮箱/QQ 群 |
 
 **重要：隐私日记功能一行未删、未改。** 采用「隔离」而非「删除」策略：
 

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using SwashbucklerDiary.Rcl.Components;
 using SwashbucklerDiary.Rcl.Models;
 using SwashbucklerDiary.Rcl.Services;
@@ -9,19 +8,11 @@ namespace SwashbucklerDiary.Rcl.Pages
 {
     public partial class AboutPage : ImportantComponentBase
     {
-        private readonly string recordNumber = "辽ICP备2023009191号-2A";
-
         private bool showSourceCode;
 
         private List<DynamicListItem> codeSourceListItems = [];
 
         private List<List<DynamicListItem>> viewLists = [];
-
-        [Inject]
-        private IAccessExternal AccessExternal { get; set; } = default!;
-
-        [Inject]
-        private ILogger<AboutPage> Logger { get; set; } = default!;
 
         [Inject]
         private IVersionUpdataManager VersionUpdataManager { get; set; } = default!;
@@ -55,8 +46,6 @@ namespace SwashbucklerDiary.Rcl.Pages
                 [
                     new(this, "Open source related","mdi:mdi-xml",() => To("relatedOSP")),
                     new(this, "Log file","mdi:mdi-file-document-edit-outline",() => To("log")),
-                    new(this, "Give a good review","star",OpenAppDetails),
-                    new(this, "Sponsor us","volunteer_activism",()=>To("sponsor")),
                 ]
             ];
         }
@@ -73,24 +62,9 @@ namespace SwashbucklerDiary.Rcl.Pages
             await HandleAchievements(Achievement.SourceCode);
         }
 
-        private async Task OpenAppDetails()
-        {
-            bool flag = await AccessExternal.OpenAppStoreAppDetails();
-            if (!flag)
-            {
-                await AlertService.ErrorAsync(I18n.T("Failed to open the application store"));
-            }
-        }
-
         private void CheckForUpdates()
         {
             VersionUpdataManager.CheckUpdates();
-        }
-
-        private async Task CopyRecordNumber()
-        {
-            await PlatformIntegration.SetClipboardAsync(recordNumber);
-            await AlertService.SuccessAsync(I18n.T("Copy successfully"));
         }
     }
 }

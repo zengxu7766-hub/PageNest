@@ -12,9 +12,9 @@ namespace SwashbucklerDiary.Rcl.Services
 
         protected int updateCount;
 
-        protected const string LatestVersionApiUrl = "https://api.github.com/repos/Yu-Core/SwashbucklerDiary/releases/latest";
-
-        protected const string zh_CNLatestVersionApiUrl = "https://gitee.com/api/v5/repos/Yu-core/SwashbucklerDiary/releases/latest";
+        // This is a third-party fork: point the update check at our own repository.
+        // GitHub is used for every locale; the upstream Gitee mirror is intentionally removed.
+        protected const string LatestVersionApiUrl = "https://api.github.com/repos/zengxu7766-hub/SwashbucklerDiary-MCP/releases/latest";
 
         protected readonly IDiaryService _diaryService;
 
@@ -88,17 +88,24 @@ namespace SwashbucklerDiary.Rcl.Services
 
         public async Task<Release?> GetLastReleaseAsync()
         {
-            var url = _i18n.Culture.Name == "zh-CN"
-                ? zh_CNLatestVersionApiUrl
-                : LatestVersionApiUrl;
-            var release = await HttpClient.GetFromJsonAsync<Release>(url).ConfigureAwait(false);
+            var release = await HttpClient.GetFromJsonAsync<Release>(LatestVersionApiUrl).ConfigureAwait(false);
             if (release is null || release.Tag_Name is null)
             {
-                throw new Exception("Tag format error");
+                return null;
             }
 
-            var latestVersion = new Version(release.Tag_Name.TrimStart('v'));
-            var currentVersion = new Version(_versionTracking.CurrentVersion);
+            // Release tags produced by the build workflow (e.g. "apk-3") are not
+            // version strings. Ignore them instead of throwing and breaking the layout.
+            if (!Version.TryParse(release.Tag_Name.TrimStart('v'), out var latestVersion))
+            {
+                return null;
+            }
+
+            if (!Version.TryParse(_versionTracking.CurrentVersion, out var currentVersion))
+            {
+                return null;
+            }
+
             if (latestVersion > currentVersion)
             {
                 return release;

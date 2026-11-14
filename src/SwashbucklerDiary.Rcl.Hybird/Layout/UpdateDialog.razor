@@ -37,28 +37,3 @@
         </MCardText>
     </MCard>
 </CustomMDialog>
-
-<CustomMDialog @bind-MyValue="showChinaMobileCloudDiskDialog"
-               ContentClass="rounded-lg"
-               MaxWidth="420">
-    <MCard>
-        <MCardTitle Class="font-weight-bold flex-nowrap">
-            <wc-auto-scroll-text>@($"{I18n.T("The extracted code")}: {ChinaMobileCloudDiskExtractCode}")</wc-auto-scroll-text>
-        </MCardTitle>
-        <MCardText Class="pb-0">
-            @I18n.T("The extracted code has been copied to the clipboard. Click OK to go to the online disk link.")
-        </MCardText>
-        <MCardActions>
-            <MSpacer></MSpacer>
-            <MButton Text="true"
-                     OnClick="()=>showChinaMobileCloudDiskDialog = false">
-                <wc-auto-scroll-text>@(I18n.T("Cancel"))</wc-auto-scroll-text>
-            </MButton>
-            <MButton Text="true"
-                     Color="primary"
-                     OnClick="ToChinaMobileCloudDisk">
-                <wc-auto-scroll-text>@(I18n.T("OK"))</wc-auto-scroll-text>
-            </MButton>
-        </MCardActions>
-    </MCard>
-</CustomMDialog>

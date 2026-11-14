@@ -19,7 +19,7 @@ Not all diaries are called daily records. This is a secret book of a swashbuckle
 </div>
 
 > **⚠️ This is a third-party fork, not affiliated with the upstream author**
-> Based on [Yu-Core/SwashbucklerDiary](https://github.com/Yu-Core/SwashbucklerDiary) (upstream commit `f45df93`). It adds an **MCP Server** endpoint so AI clients can read/write diary entries and tags. The existing private-diary feature is unchanged and explicitly isolated from MCP.
+> Based on [Yu-Core/SwashbucklerDiary](https://github.com/Yu-Core/SwashbucklerDiary) (upstream commit `f45df93`). This fork is renamed **"栖页"** with a new app icon, adds an **MCP Server** endpoint so AI clients can read/write diary entries and tags, trims the About/Mine pages and points update checks to this repository. The existing private-diary feature is unchanged and explicitly isolated from MCP.
 > The upstream project is licensed under **AGPL-3.0**; this fork is likewise released under **AGPL-3.0** (see [LICENSE.txt](./LICENSE.txt)), and all modifications are provided under the same license. See [MCP-BUILD.md](./MCP-BUILD.md) for the change list, build/APK instructions and MCP usage.
 
 ## 🌏️ Online preview

@@ -27,19 +27,6 @@
                     <MListItemSubtitle Class="mb-2">
                         <wc-auto-scroll-text>@(I18n.T("An open source, cross platform local diary application"))</wc-auto-scroll-text>
                     </MListItemSubtitle>
-                    @if (PlatformIntegration.CurrentPlatform.OS != AppOperatingSystem.Browser)
-                    {
-                        <MListItemSubtitle>
-                            <a href="https://beian.miit.gov.cn/" target="_blank" class="text--disabled text-decoration-none" style="font-size:0.75rem;">
-                                @(I18n.T("App Record number :") + recordNumber)
-                            </a>
-                            <MButton Class="text--disabled"
-                                     IconName="content_copy"
-                                     XSmall
-                                     OnClick="CopyRecordNumber">
-                            </MButton>
-                        </MListItemSubtitle>
-                    }
                 </MListItemContent>
             </MListItem>
         </MList>

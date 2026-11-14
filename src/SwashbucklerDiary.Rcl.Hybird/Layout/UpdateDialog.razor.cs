@@ -10,11 +10,8 @@ namespace SwashbucklerDiary.Rcl.Hybird.Layout
 {
     public partial class UpdateDialog : UpdateDialogBase
     {
-        private const string githubReleasesUrl = "https://github.com/Yu-Core/SwashbucklerDiary/releases";
-        private const string ChinaMobileCloudDiskUrl = "https://yun.139.com/shareweb/#/w/i/2u8omYzvLhqdo";
-        private const string ChinaMobileCloudDiskExtractCode = "3dgn";
+        private const string githubReleasesUrl = "https://github.com/zengxu7766-hub/SwashbucklerDiary-MCP/releases";
         private bool showUpdateMethodDialog;
-        private bool showChinaMobileCloudDiskDialog;
         private List<DynamicListItem<UpdateMethod>> items = [];
 
         [Inject]
@@ -37,7 +34,6 @@ namespace SwashbucklerDiary.Rcl.Hybird.Layout
             }
 
             items.Add(new(this, "Github releases", "mdi:mdi-github", ToUpdate, UpdateMethod.GithubReleases));
-            items.Add(new(this, "China Mobile Cloud Disk", "cloud", ToUpdate, UpdateMethod.ChinaMobileCloudDisk));
         }
 
         public async Task ToUpdate(UpdateMethod updateMethod)
@@ -51,9 +47,6 @@ namespace SwashbucklerDiary.Rcl.Hybird.Layout
                     break;
                 case UpdateMethod.GithubReleases:
                     await ToGithubReleases();
-                    break;
-                case UpdateMethod.ChinaMobileCloudDisk:
-                    await CopyChinaMobileCloudDisk();
                     break;
                 default:
                     break;
@@ -74,19 +67,6 @@ namespace SwashbucklerDiary.Rcl.Hybird.Layout
         {
             showUpdateMethodDialog = false;
             await PlatformIntegration.OpenBrowser(githubReleasesUrl);
-        }
-
-        private async Task CopyChinaMobileCloudDisk()
-        {
-            showUpdateMethodDialog = false;
-            await PlatformIntegration.SetClipboardAsync(ChinaMobileCloudDiskExtractCode);
-            showChinaMobileCloudDiskDialog = true;
-        }
-
-        private async Task ToChinaMobileCloudDisk()
-        {
-            showChinaMobileCloudDiskDialog = false;
-            await PlatformIntegration.OpenBrowser(ChinaMobileCloudDiskUrl);
         }
 
         protected override Task ToUpdate()
