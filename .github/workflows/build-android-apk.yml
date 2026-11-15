@@ -89,7 +89,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed with $LASTEXITCODE" }
           $apk = Get-ChildItem -Path 'src/SwashbucklerDiary.Maui/bin' -Recurse -Filter '*Signed.apk' | Select-Object -First 1
           if (-not $apk) { throw 'Signed APK not found after publish' }
-          $dest = Join-Path $env:ARTIFACTS ("SwashbucklerDiary-MCP-" + $rid + ".apk")
+          $dest = Join-Path $env:ARTIFACTS ("PageNest-" + $rid + ".apk")
           Copy-Item $apk.FullName $dest
           Write-Host "APK: $dest"
 

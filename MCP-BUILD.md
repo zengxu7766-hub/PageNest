@@ -1,6 +1,6 @@
 # 栖页 / PageNest · MCP Server 改造说明
 
-本仓库：https://github.com/zengxu7766-hub/SwashbucklerDiary-MCP
+本仓库：https://github.com/zengxu7766-hub/PageNest
 
 基于 [Yu-Core/SwashbucklerDiary](https://github.com/Yu-Core/SwashbucklerDiary)
 （上游 commit `f45df93`，AGPL-3.0）增加了 **MCP（Model Context Protocol）服务端接口**，
@@ -38,7 +38,7 @@ APK 使用固定签名（可直接覆盖升级）**。
 | `Rcl/wwwroot/i18n/*.json`（12→3 语言） | 键 `"Swashbuckler Diary"` 的值：中文「栖页」、英文 `PageNest`（键名不变，避免改 7 处 `I18n.T(...)` 源码） |
 | `Rcl/Pages/Mine/About/AboutPage.razor(.cs)` | 去掉「APP备案号:辽ICP备2023009191号-2A」整块、去掉「捐助我们」与「给个好评」入口及相关字段/方法/注入 |
 | `Rcl/Pages/Mine/MinePage.razor(.cs)` | 去掉「联系我们」及其弹窗、反馈数据、邮件/Github/QQ 群方法、`IAccessExternal`/`ILogger` 注入 |
-| `Rcl/Services/VersionUpdataManager/VersionUpdataManager.cs` | 检查更新 API 改为 `https://api.github.com/repos/zengxu7766-hub/SwashbucklerDiary-MCP/releases/latest`（去掉 Gitee 分流），并用 `Version.TryParse` 兼容本仓库 `apk-N` 这类非版本 tag |
+| `Rcl/Services/VersionUpdataManager/VersionUpdataManager.cs` | 检查更新 API 改为 `https://api.github.com/repos/zengxu7766-hub/PageNest/releases/latest`（去掉 Gitee 分流），并用 `Version.TryParse` 兼容本仓库 `apk-N` 这类非版本 tag |
 | `Rcl.Hybird/Layout/UpdateDialog.razor(.cs)`、`Rcl.Web/Layout/UpdateDialog.cs` | 更新地址改到本仓库 Releases；删掉上游作者的「移动云盘」下载项及弹窗 |
 | `Rcl/wwwroot/json/{app-features,code-source,feedback-type}/*.json` | 搜索索引移除捐助/好评条目；「查看源码」指向本 fork（保留 Upstream 署名）；清理上游邮箱/QQ 群 |
 
@@ -75,10 +75,10 @@ APK 使用固定签名（可直接覆盖升级）**。
 
 ### 用 GitHub Actions 出 APK（推荐）
 
-本仓库已托管在 [zengxu7766-hub/SwashbucklerDiary-MCP](https://github.com/zengxu7766-hub/SwashbucklerDiary-MCP)（公开，AGPL-3.0）。
+本仓库已托管在 [zengxu7766-hub/PageNest](https://github.com/zengxu7766-hub/PageNest)（公开，AGPL-3.0）。
 
 1. 打开仓库 → **Actions** → 左侧 **Build Android APK (MCP fork)** → **Run workflow**。
-2. 选 `arm64`（真机）或 `x64`（模拟器），是否附带到 Release；跑完在 **Artifacts** 下载 `SwashbucklerDiary-MCP-<arch>.apk`。
+2. 选 `arm64`（真机）或 `x64`（模拟器），是否附带到 Release；跑完在 **Artifacts** 下载 `PageNest-<arch>.apk`。
 
 > **已实测（2026-11-15）**：`arm64` 手动构建全流程成功（约 10 分钟），
 > 产出 `android-arm64-apk` artifact ≈ 86 MB，内含 `arm64-v8a` 原生库与签名
@@ -95,7 +95,7 @@ APK 使用固定签名（可直接覆盖升级）**。
 - **固定签名（2026-11-15 起）**：keystore 只生成一次，base64 后存入仓库 Actions Secret
   `ANDROID_KEYSTORE_BASE64`；每次构建由 `Restore the fixed signing keystore` 步骤解码复用，
   并在日志打印证书 `SHA256` 指纹。**每次出的 APK 签名一致，可以直接覆盖升级**，不必卸载、不丢日记数据。
-  - 证书：`CN=QiYe, O=SwashbucklerDiary-MCP, C=CN`，有效期至 2054-04-02，
+  - 证书：`CN=QiYe, O=SwashbucklerDiary-MCP, C=CN`（组织名是 keystore 建立时写入的，不随仓库改名变化），有效期至 2054-04-02，
     SHA256 `86:65:32:61:23:8A:C6:A5:C5:12:B2:C5:D1:6D:C9:8A:37:0F:1A:56:A5:3D:D9:7C:BC:B6:31:99:8C:D0:CE:F2`。
   - keystore 备份在手机存储 `Download/DSH-Go/qiye-release.keystore`（storepass/keypass 均 `android`，alias `androiddebugkey`）。
     **请自行妥善保管**：Secret 只能写入、不能读回；丢了它就无法再产出同签名 APK。

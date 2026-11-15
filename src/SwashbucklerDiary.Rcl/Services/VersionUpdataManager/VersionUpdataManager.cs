@@ -14,7 +14,7 @@ namespace SwashbucklerDiary.Rcl.Services
 
         // This is a third-party fork: point the update check at our own repository.
         // GitHub is used for every locale; the upstream Gitee mirror is intentionally removed.
-        protected const string LatestVersionApiUrl = "https://api.github.com/repos/zengxu7766-hub/SwashbucklerDiary-MCP/releases/latest";
+        protected const string LatestVersionApiUrl = "https://api.github.com/repos/zengxu7766-hub/PageNest/releases/latest";
 
         protected readonly IDiaryService _diaryService;
 

@@ -10,7 +10,7 @@ namespace SwashbucklerDiary.Rcl.Hybird.Layout
 {
     public partial class UpdateDialog : UpdateDialogBase
     {
-        private const string githubReleasesUrl = "https://github.com/zengxu7766-hub/SwashbucklerDiary-MCP/releases";
+        private const string githubReleasesUrl = "https://github.com/zengxu7766-hub/PageNest/releases";
         private bool showUpdateMethodDialog;
         private List<DynamicListItem<UpdateMethod>> items = [];
 

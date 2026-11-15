@@ -6,7 +6,7 @@ namespace SwashbucklerDiary.Rcl.Web.Layout
 {
     public class UpdateDialog : UpdateDialogBase
     {
-        private const string githubUrl = "https://github.com/zengxu7766-hub/SwashbucklerDiary-MCP/releases";
+        private const string githubUrl = "https://github.com/zengxu7766-hub/PageNest/releases";
 
         [Inject]
         private IPlatformIntegration PlatformIntegration { get; set; } = default!;
