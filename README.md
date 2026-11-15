@@ -1,12 +1,12 @@
-<h1 align="center">侠客日记</h1>
+<h1 align="center">栖页 / PageNest</h1>
 
 <div align="center">
 
 [English](./README.en-US.md) | 简体中文
 
-「 侠客日记 」是一个开源、跨平台的本地日记APP。
+「 栖页 」（英文名 **PageNest**）是一个开源、跨平台的本地日记 APP。
 
-不是所有日记都叫流水账，这本是侠客的秘籍！记录生活点滴，书写你的江湖传说。
+本修改版仅保留 **简体中文 / 繁体中文 / English** 三种界面语言。
 
 ![GitHub Repo size](https://img.shields.io/github/repo-size/Yu-Core/SwashbucklerDiary?style=flat-square&color=FF5722)
 [![GitHub license](https://img.shields.io/github/license/Yu-Core/SwashbucklerDiary?style=flat-square)](LICENSE)
@@ -19,7 +19,7 @@
 </div>
 
 > **⚠️ 这是第三方修改版（Fork），与上游作者无关**
-> 本仓库基于 [Yu-Core/SwashbucklerDiary](https://github.com/Yu-Core/SwashbucklerDiary)（上游 commit `f45df93`）修改，改名为 **「栖页」** 并更换图标，新增了 **MCP Server** 接口让 AI 客户端可以读写日记和标签，精简了关于/我的页并把检查更新指向本仓库；原有隐私日记功能保持不动，并做了隔离保护。
+> 本仓库基于 [Yu-Core/SwashbucklerDiary](https://github.com/Yu-Core/SwashbucklerDiary)（上游 commit `f45df93`）修改，改名为 **「栖页」/ PageNest** 并更换图标，界面语言精简为简体中文/繁体中文/English 三种，新增了 **MCP Server** 接口让 AI 客户端可以读写日记和标签，精简了关于/我的页并把检查更新指向本仓库；原有隐私日记功能保持不动，并做了隔离保护。
 > 原项目采用 **AGPL-3.0** 协议，本修改版同样以 **AGPL-3.0** 开源（见 [LICENSE.txt](./LICENSE.txt)），所有改动亦按该协议提供。改动清单、编译/出 APK 步骤与 MCP 用法详见 [MCP-BUILD.md](./MCP-BUILD.md)。
 
 ## 🔗 在线预览
