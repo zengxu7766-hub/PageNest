@@ -25,9 +25,6 @@ namespace SwashbucklerDiary.Maui
 
             blazorWebView.BlazorWebViewInitializing += BlazorWebViewInitializingCore;
             blazorWebView.BlazorWebViewInitialized += BlazorWebViewInitialized;
-#if IOS || WINDOWS
-            Initialize();
-#endif
         }
 
         private partial void BlazorWebViewInitializing(object? sender, BlazorWebViewInitializingEventArgs e);

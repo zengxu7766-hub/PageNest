@@ -9,18 +9,8 @@ namespace SwashbucklerDiary.Maui.Essentials
         public static IAppFileSystem Default
             => defaultImplementation ??= new AppFileSystem();
 
-        public override string AppDataDirectory =>
-#if IOS || MACCATALYST
-            _platformAppDataDirectory.Value;
-#else
-            FileSystem.Current.AppDataDirectory;
-#endif
+        public override string AppDataDirectory => FileSystem.Current.AppDataDirectory;
 
-        public override string CacheDirectory =>
-#if IOS || MACCATALYST
-            _platformCacheDirectory.Value;
-#else
-            FileSystem.Current.CacheDirectory;
-#endif
+        public override string CacheDirectory => FileSystem.Current.CacheDirectory;
     }
 }

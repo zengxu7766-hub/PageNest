@@ -85,10 +85,6 @@ namespace SwashbucklerDiary.Maui
             {
                 Windows[0].Title = _i18n.T("Swashbuckler Diary");
             }
-
-#if WINDOWS
-            TitleBarButtonDirectionHelper.UpdateTitleBarButtonDirection(Windows[0], _i18n.Culture.TextInfo.IsRightToLeft);
-#endif
         }
     }
 }

@@ -52,6 +52,20 @@ APK 使用固定签名（可直接覆盖升级）**。
   `ReadI18nTextAsync` 在文件缺失时回退 `en-US`，故 `functional-description` 等仅有 en-US + zh-CN 的文档对繁体用户安全回退英文。
 - **`ApplicationId` 始终不变**（`com.yucore.swashbucklerdiary`）：保证与旧版覆盖安装、不丢日记数据。
 
+### 1.3 纯 Android-only 裁剪（2026-11-15）
+
+本 fork 只出 Android APK，因此把 Maui 工程收敛为单目标、删掉所有非 Android 平台代码：
+
+| 位置 | 内容 |
+| --- | --- |
+| `Maui/SwashbucklerDiary.Maui.csproj` | `<TargetFrameworks>net10.0-android</TargetFrameworks>` 单目标；删除 Windows 条件追加、ios/maccatalyst/windows 的版本与 `SupportedOSPlatformVersion` 条件、`MtouchInterpreter`、5 个按平台 `Compile Remove` 的 ItemGroup、3 个非 android `MauiIcon`、iOS/MacCatalyst 的 `BundleResource`、状态栏 css 的非 android 分支；`SupportedOSPlatformVersion` 固定 `26.0`、`UseMonoRuntime=false`（Release, CoreCLR）保留；`ApplicationId` 不变 |
+| `Maui/Platforms/{iOS,MacCatalyst,Windows}/` | 整目录删除（共 48 个文件：AppDelegate/Program/Info.plist/Entitlements/plist、Windows App.xaml/Package.appxmanifest/app.manifest、12 语言 Resources 等）。`Platforms/Android/` 完整保留 |
+| `Maui/MainPage.xaml.{MaciOS,Windows,iOS}.cs`、`BlazorWebView/MaciOS/`、`Essentials/**/*.MaciOS.cs`、`Essentials/AppLifecycle/AppActivation.Windows.cs` | 非 Android 平台分部实现删除；保留 `MainPage.xaml.Android.cs`（`BlazorWebViewInitializing`/`BlazorWebViewInitialized` 的 Android 实现）与全部 `*.Android.cs` |
+| `Maui/MauiProgram.cs`、`App.xaml.cs`、`MainPage.xaml.cs`、`Essentials/AppFileSystem/AppFileSystem.cs` | 清理引用已删类型的死 `#if`（`WebViewNavigationDelegate`、`TitleBarButtonDirectionHelper`、`Initialize()`、`_platformAppDataDirectory/CacheDirectory`）；`AppFileSystem` 直接用 `FileSystem.Current.*`；**MCP 启动钩子 `IMcpService.Apply()` 保留** |
+| 其余 `#if ANDROID/IOS/WINDOWS/...` 业务分支 | 保留不动：预编译指令在 Android 编译时自动排除，删除需重写工作逻辑、风险大收益小 |
+
+`src/` 下另外 5 个非安卓项目（Gtk / Server / WebAssembly / Rcl.Web / Maui.Essentials）**保留在本地仓库**（交付的 zip 从来只包含 4 个安卓必需项目），避免大范围删除引入风险；`SwashbucklerDiary.Maui.slnx` 也仍只含 4 个项目。裁剪后经 GitHub Actions `build-android-apk.yml` 真出 APK 验证。
+
 **重要：隐私日记功能一行未删、未改。** 采用「隔离」而非「删除」策略：
 
 - 隐私日记存在独立的第二个 SQLite 库，`BaseRepository` 会在 `TempSetting.PrivacyMode == true` 时切换到它。

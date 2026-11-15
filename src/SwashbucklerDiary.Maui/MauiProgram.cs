@@ -28,24 +28,11 @@ namespace SwashbucklerDiary.Maui
                 .ConfigureEssentials(essentials =>
                 {
                     essentials.UseVersionTracking()
-#if !WINDOWS
                               .OnAppAction(AppActionsHelper.HandleAppActions)
-#endif
                               ;
                 });
 
             builder.Services.AddMauiBlazorWebView();
-
-#if IOS || MACCATALYST
-            BlazorWebViewHandler.BlazorWebViewMapper.AppendToMapping(nameof(IBlazorWebView.HostPage), (handler, view) =>
-            {
-                handler.PlatformView.NavigationDelegate = new WebViewNavigationDelegate();
-            });
-            BlazorWebViewHandler.BlazorWebViewMapper.AppendToMapping(nameof(IBlazorWebView.RootComponents), (handler, view) =>
-            {
-                handler.PlatformView.NavigationDelegate = new WebViewNavigationDelegate();
-            });
-#endif
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
