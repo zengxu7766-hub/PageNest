@@ -83,6 +83,10 @@ APK 使用固定签名（可直接覆盖升级）**。
 > **已实测（2026-11-15）**：`arm64` 手动构建全流程成功（约 10 分钟），
 > 产出 `android-arm64-apk` artifact ≈ 86 MB，内含 `arm64-v8a` 原生库与签名
 > （`META-INF/ANDROIDD.RSA`）。本机也已把 APK 下载到手机存储供真机安装。
+>
+> **固定签名已实测**：连续触发 run #3、run #4 两次构建，分别用
+> `keytool -printcert -jarfile` 读取 APK 证书，两次 SHA256 完全一致
+> （`86:65:…:CE:F2`，且等于持久 keystore 指纹），证明每次产物可互相覆盖升级。
 
 工作流要点：
 
