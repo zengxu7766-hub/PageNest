@@ -1,6 +1,7 @@
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.OS;
 
 namespace SwashbucklerDiary.Maui.Services
 {
@@ -13,7 +14,7 @@ namespace SwashbucklerDiary.Maui.Services
     [Service(
         Label = "@string/app_name",
         Exported = false,
-        ForegroundServiceType = ForegroundServiceType.SpecialUse)]
+        ForegroundServiceType = Android.Content.PM.ForegroundService.TypeSpecialUse)]
     public sealed class McpForegroundService : Service
     {
         public const int NotificationId = 20241115;
@@ -30,7 +31,7 @@ namespace SwashbucklerDiary.Maui.Services
             {
                 // Android 14+ requires the foreground service type to be
                 // declared (manifest) and passed when starting.
-                StartForeground(NotificationId, notification, ForegroundServiceType.SpecialUse);
+                StartForeground(NotificationId, notification, Android.Content.PM.ForegroundService.TypeSpecialUse);
             }
             else
             {
