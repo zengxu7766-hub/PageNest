@@ -15,6 +15,9 @@ namespace SwashbucklerDiary.Rcl.Extensions
             // Safe default for hosts that don't ship the MCP HTTP server.
             // The Maui host registers the real McpService BEFORE calling this.
             services.TryAddSingleton<IMcpService, NullMcpService>();
+            // No-op keep-alive default; the Maui host registers the Android
+            // foreground-service implementation BEFORE calling this method.
+            services.TryAddSingleton<IMcpKeepAlive, NullMcpKeepAlive>();
             return services;
         }
     }

@@ -2,4 +2,8 @@
 <resources>
     <string name="app_name">栖页</string>
     <string name="app_name_debug">栖页 Debug</string>
+    <string name="mcp_keepalive_channel">MCP 服務</string>
+    <string name="mcp_keepalive_channel_desc">保持 MCP 服務在背景執行</string>
+    <string name="mcp_keepalive_title">栖頁 MCP 正在執行</string>
+    <string name="mcp_keepalive_text">MCP 服務已開啟，點選可開啟栖頁</string>
 </resources>

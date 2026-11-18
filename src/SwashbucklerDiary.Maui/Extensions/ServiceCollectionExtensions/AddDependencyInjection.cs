@@ -34,6 +34,9 @@ namespace SwashbucklerDiary.Maui.Extensions
             // Real MCP server (Maui/Android only). Register BEFORE AddRclDependencyInjection
             // so its TryAddSingleton<IMcpService, NullMcpService>() does not take effect.
             services.AddSingleton<IMcpService, McpService>();
+            // Android foreground-service keep-alive; also registered before the Rcl
+            // default so TryAddSingleton<IMcpKeepAlive, NullMcpKeepAlive>() is a no-op.
+            services.AddSingleton<IMcpKeepAlive, Services.McpKeepAlive>();
 
             services.AddRclDependencyInjection();
 

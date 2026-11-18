@@ -18,16 +18,18 @@ namespace SwashbucklerDiary.Rcl.Hybird.Services
         private readonly ISettingService _settingService;
         private readonly IDiaryService _diaryService;
         private readonly ITagService _tagService;
+        private readonly IMcpKeepAlive _keepAlive;
         private readonly object _sync = new();
 
         private WebServer? _server;
         private McpContext? _context;
 
-        public McpService(ISettingService settingService, IDiaryService diaryService, ITagService tagService)
+        public McpService(ISettingService settingService, IDiaryService diaryService, ITagService tagService, IMcpKeepAlive keepAlive)
         {
             _settingService = settingService;
             _diaryService = diaryService;
             _tagService = tagService;
+            _keepAlive = keepAlive;
         }
 
         public bool IsSupported => true;
@@ -48,17 +50,22 @@ namespace SwashbucklerDiary.Rcl.Hybird.Services
                 if (!enabled)
                 {
                     Stop();
+                    _keepAlive.Stop();
                     return;
                 }
 
                 // Restarting unconditionally also picks up port / token / LAN changes.
                 Stop();
                 Start();
+                // Keep the process in the foreground so the OS does not reclaim
+                // the HTTP server while the app is backgrounded.
+                _keepAlive.Start();
             }
             catch
             {
                 // A failure here must never prevent the app from starting.
                 Stop();
+                _keepAlive.Stop();
             }
         }
 
@@ -139,6 +146,7 @@ namespace SwashbucklerDiary.Rcl.Hybird.Services
         public void Dispose()
         {
             Stop();
+            _keepAlive.Stop();
             GC.SuppressFinalize(this);
         }
     }

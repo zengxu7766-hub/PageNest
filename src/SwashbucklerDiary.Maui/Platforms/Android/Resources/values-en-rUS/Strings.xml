@@ -2,4 +2,8 @@
 <resources>
     <string name="app_name">PageNest</string>
     <string name="app_name_debug">PageNest Debug</string>
+    <string name="mcp_keepalive_channel">MCP Service</string>
+    <string name="mcp_keepalive_channel_desc">Keeps the MCP server running in the background</string>
+    <string name="mcp_keepalive_title">PageNest MCP is running</string>
+    <string name="mcp_keepalive_text">MCP service is active. Tap to open PageNest.</string>
 </resources>
